@@ -36,12 +36,13 @@
         :width="65"
         :labels="{checked: 'GPU', unchecked: 'CPU'}"
       />
+       <div id="example-1">
+    <button v-on:click="onSubmit">Add connection</button>
+    <p> connected {{ status }} To {{answer}}.</p>
+    </div>
+
   </div>
-  <div id="example-1">
-  <button v-on:click="onSubmit">Add connection</button>
-  <p> connected {{ status }} To {{answer}}.</p>
-  </div>
-   <table id="demo-table-id" class="table table-striped">
+    <table id="demo-table-id" class="table table-striped">
         <caption></caption>
         <thead>
           <tr>
