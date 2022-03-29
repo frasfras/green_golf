@@ -57,69 +57,12 @@
             <td><button type="button" class="btn btn-info">  minutes</button> </td>
             <td><button type="button" class="btn btn-info">  minutes</button> </td>
           </tr>
-          <tr>
-            <td>1  </td>
-            <td> 10</td>
-            <td>13</td>
-            <td>8</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>2 </td>
-            <td> 9</td>
-            <td>13</td>
-            <td>15</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>3 </td>
-            <td> 12</td>
-            <td>13</td>
-            <td>8</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td> 10</td>
-            <td>13</td>
-            <td>15</td>
-            <td>12</td>
-          </tr>
-
-          <tr>
-            <td>5 </td>
-            <td> 10</td>
-            <td>10</td>
-            <td>15</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>6 </td>
-            <td> 10</td>
-            <td>15</td>
-            <td>8</td>
-            <td>15</td>
-          </tr>
-          <tr>
-            <td>7 </td>
-            <td> 10</td>
-            <td>15</td>
-            <td>15</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>8 </td>
-            <td> 11</td>
-            <td>15</td>
-            <td>15</td>
-            <td>12</td>
-          </tr>
-          <tr>
-            <td>9 </td>
-            <td> 8</td>
-            <td>15</td>
-            <td>15</td>
-            <td>12</td>
+           <tr v-for="plan in plans" :key="plan.id">          
+            <td> {{plan['fields']['Hole']}}</td>
+            <td> {{plan['fields']['Fairway']}}</td>
+            <td>{{plan['fields']['Greens']}}</td>
+            <td>{{plan['fields']['Teebox']}}</td>
+            <td>{{plan['fields']['Roughs']}}</td>
           </tr>
           <tr class="info">
             <td colspan="4"></td>
@@ -153,13 +96,38 @@ export default {
       fairw: false,
       cpu: false,
       green: false,
+      checked: false,
       courses: null,
+      plans: null
     };
   },
   created: function() {
       axios
         .get("https://mocki.io/v1/69bd11f5-7c1d-4637-8a20-07acbd823cf1")
         .then (res => { this.courses = res.data;});
+        this.loadPlan();
+  },
+   mounted: function() {
+          //  this.loadPlan();
+           
+  },
+  methods: {
+            loadPlan: function() {
+                // Get /intro content
+              
+                var self = this
+               
+                this.plans = []
+                axios.get("https://api.airtable.com/v0/" + "appneKtre6Ux4ESiq" + "/waterplan?sort%5B0%5D%5Bfield%5D=Hole&sort%5B0%5D%5Bdirection%5D=asc",
+                
+                 {
+                        headers: { Authorization: "Bearer " + "keyjVpG4zXCD49VfC" }
+                    })
+                    .then(function(response) { self.plans = response.data.records })
+                    .catch(function(error) {
+                        console.log(error)
+                    })
+            },
   }
 }
 </script>
