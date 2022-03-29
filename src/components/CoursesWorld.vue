@@ -37,6 +37,10 @@
         :labels="{checked: 'GPU', unchecked: 'CPU'}"
       />
   </div>
+  <div id="example-1">
+  <button v-on:click="onSubmit">Add connection</button>
+  <p> connected {{ status }} To {{answer}}.</p>
+  </div>
    <table id="demo-table-id" class="table table-striped">
         <caption></caption>
         <thead>
@@ -85,7 +89,15 @@ import axios from "axios";
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+     api_endpoint_cpu: {
+      type: String,
+      default: "http://localhost:8081/api"
+    },
+    api_endpoint_gpu: {
+      type: String,
+      default: "https://mocki.io/v1/4b04474f-5f43-46bd-8376-cf8d48f669a2"
+    },
   },
   components: {
     ToggleButton
@@ -97,6 +109,8 @@ export default {
       cpu: false,
       green: false,
       checked: false,
+      status: "",
+      answer: "",
       courses: null,
       plans: null
     };
@@ -128,6 +142,25 @@ export default {
                         console.log(error)
                     })
             },
+            onSubmit(evt) {
+              evt.preventDefault();
+              this.status = "loading";
+              if (this.gpu) {
+                var api_endpoint = this.api_endpoint_gpu
+              } else {
+                api_endpoint = this.api_endpoint_cpu
+              }
+              let self = this;
+              axios
+                .get(api_endpoint, { params: { query: self.query } })
+                .then(function(response) {
+                self.answer = response.data.courses.name;
+                  self.status = "done";
+                })
+                .catch(function(error) {
+                  alert(error);
+                });
+            }
   }
 }
 </script>
